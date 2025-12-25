@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <base target="_top">
+    <style>
+        .button01 {
+  background-color: #2f4f4f;
+  color: #fff;
+  padding: 10px 30px;
+  text-decoration: none;
+  font-size: 1em;
+}
+.button01:hover {
+  color: #fff;
+  opacity: 0.8;
+}
+    </style>
+  </head>
+  <body>
+    manabaカレンダーセットアップ
+    <div id="mail"></div>
+    <button id="btn" class="button01" onclick="clickedButton()">このアカウントでリマインダーを設定する</button>
+    <script>
+      function account(){
+        google.script.run.withSuccessHandler(function(mail){
+          let provider = mail.split('@')[1];
+          console.log(provider);
+          if(provider!='edu.tottori-u.ac.jp'){
+            alert('鳥大ID以外でログインしています。manabaの通知をこのアカウントで受信している場合は続行してください。');
+          }
+            document.getElementById('btn').classList.remove('disabled');
+            document.getElementById('mail').innerText='サインインしているアカウント：'+mail;
+        }).getMailAddress();
+      }
+
+      function clickedButton(){
+        document.getElementById('btn').remove();
+      google.script.run.withSuccessHandler(function (result){
+        if(result==true){
+                let p = document.createElement('p')
+            if(window.confirm('設定が完了しました。テストメールを送信しますか？')){
+              google.script.run.withSuccessHandler(function(result){
+                p.innerText = 'テストメールを送信しました。一時間以内にダミーの予定がカレンダーに追加されます。\nインストールが完了しました。タブを閉じてください。';
+              }).sendTestMail();
+            }else{
+                p.innerText = 'インストールが完了しました。テストメールは送信されません。\nタブを閉じてください。';
+              }
+                document.getElementById('mail').appendChild(p);
+        }
+    }).createTrigger();
+      }
+        document.getElementById('btn').classList.add('disabled');
+      account()
+
+
+    </script>
+  </body>
+</html>
