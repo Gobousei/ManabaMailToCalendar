@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>manabaカレンダー連携ツール</title>
+    <style>
+        :root {
+            --primary-color: #4285f4;
+            --accent-color: #ea4335;
+            --bg-color: #f8f9fa;
+            --text-color: #333;
+            --card-bg: #ffffff;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: var(--text-color);
+            background-color: var(--bg-color);
+            margin: 0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        .header h1 {
+            margin-bottom: 10px;
+            color: var(--primary-color);
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .card h2 {
+            border-bottom: 2px solid var(--primary-color);
+            padding-bottom: 10px;
+            margin-top: 0;
+            font-size: 1.4rem;
+        }
+        .alert {
+            background-color: #fff3cd;
+            color: #856404;
+            padding: 20px;
+            border-radius: 5px;
+            border: 1px solid #ffeeba;
+            margin-bottom: 20px;
+        }
+        .alert ul {
+            margin: 0;
+            padding-left: 20px;
+        }
+        .alert li {
+            margin-bottom: 10px;
+        }
+        .alert li:last-child {
+            margin-bottom: 0;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 15px;
+        }
+        .step-number {
+            background-color: var(--primary-color);
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            flex-shrink: 0;
+            font-weight: bold;
+        }
+        .screenshot-guide {
+            background-color: #f1f1f1;
+            padding: 15px;
+            border-radius: 5px;
+            font-size: 0.9rem;
+            margin: 10px 0;
+            border-left: 4px solid var(--accent-color);
+        }
+        .btn-container {
+            text-align: center;
+            margin: 40px 0;
+        }
+        .btn {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 40px;
+            text-decoration: none;
+            border-radius: 50px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: inline-block;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 8px rgba(0,0,0,0.15);
+        }
+        .tos-box {
+            font-size: 0.9rem;
+            max-height: 200px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            padding: 15px;
+            background-color: #fafafa;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.8rem;
+            color: #777;
+            margin-top: 40px;
+        }
+        @media (max-width: 600px) {
+            .card { padding: 20px; }
+            .btn { width: 80%; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header">
+        <h1>manabaカレンダー自動追加</h1>
+        <p>大学の課題メールを解析し、Googleカレンダーに自動登録するツール</p>
+    </div>
+
+    <div class="alert">
+        <strong>⚠️ 実行前の重要確認事項</strong>
+        <ul>
+            <li><strong>アカウントの確認：</strong>必ず <strong>manabaからのメール通知を受信しているGoogleアカウント</strong> で実行してください。別のアカウント（個人のGmailなど）ではメールが見つからず動作しません。</li>
+            <li><strong>未読の維持：</strong>カレンダーへの追加前にmanabaからのメールを開封（既読に）すると、カレンダーに追加されません。もし開いてしまった場合は、手動で「未読」に戻してください。</li>
+        </ul>
+    </div>
+
+    <div class="card">
+        <h2>初めての方へ：警告画面について</h2>
+        <p>このアプリは個人（学生）が作成したものであり、Googleの正式な検証を受けていません。そのため、初回アクセス時に警告画面が表示されますが、以下の手順で進むことで利用可能です。</p>
+        
+        <div class="screenshot-guide">
+            <strong>画面に「このアプリはGoogleで確認されていません」と表示された場合：</strong>
+            <div class="step" style="margin-top:10px;">
+                <div class="step-number">1</div>
+                <div>左下の<strong>「詳細」</strong>（Advanced）というリンクをクリックします。</div>
+            </div>
+            <div class="step">
+                <div class="step-number">2</div>
+                <div>展開されたテキストの下部にある<strong>「（安全ではないページ）に移動」</strong>をクリックします。</div>
+            </div>
+            <div class="step">
+                <div class="step-number">3</div>
+                <div>権限のリクエスト画面で<strong>「許可」</strong>（Allow）を押してください。</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>利用規約・プライバシーポリシー</h2>
+        <div class="tos-box">
+            <p><strong>1. 概要</strong><br>
+            本ツールは、ユーザーのGmailから特定の件名（manaba等）を持つメールを検索し、その内容を解析してユーザー自身のGoogleカレンダーに予定を追加するスクリプトです。</p>
+
+            <p><strong>2. データとプライバシー</strong><br>
+            ・本ツールは、ユーザーのGoogleアカウント（Gmail、Calendar）へのアクセス権限を使用しますが、取得したデータはユーザー自身のカレンダーへの登録のみに使用されます。<br>
+            ・メールの内容やカレンダーのデータが、開発者や外部のサーバーに送信・保存されることは一切ありません。<br>
+            ・処理はすべてGoogleのサーバー上（Google Apps Script）で完結します。</p>
+
+            <p><strong>3. 免責事項</strong><br>
+            ・本ツールの利用により生じたいかなる損害（課題の提出忘れ、データの消失など）についても、開発者は一切の責任を負いません。<br>
+            ・manabaのメール形式が変更された場合、正しく動作しなくなる可能性があります。<br>
+            ・必ずご自身の責任においてご利用ください。</p>
+        </div>
+        <p style="text-align: center; margin-top: 15px;">
+            <small>上記の利用規約に同意の上、設定へ進んでください。</small>
+        </p>
+    </div>
+
+    <div class="btn-container">
+        <a href="https://script.google.com/macros/s/AKfycbyrzqqCzzTFb4CZiS00_PH2Cx8JS4yeUGkyBejhawM319Os4oupFdbjcW1omkEYpPw/exec" class="btn" target="_blank">設定ページへ移動する</a>
+    </div>
+
+    <div class="footer">
+        <p>© 2025 Manaba Calendar Automation</p>
+    </div>
+</div>
+
+</body>
+</html>
